@@ -49,11 +49,11 @@
     </nav>
 
     <!-- Sivun sisältö -->
-    <main  style="font-family: 'Times New Roman', Times, serif;">
-        <div class="card mb-3" style="max-width: 660px; max-height: 600px;">
+    <main style="font-family: 'Times New Roman', Times, serif;">
+        <div class="card mb-3" id="saa-card" style="max-width: 400px; max-height: 600px;">
             <div class="card-body" color="">
                 <h1 class="card-title"><strong>Sää Helsingissä</strong></h1>
-                
+
                 <!-- JS kello -->
                 <div id="kello" style="margin-bottom: 10px; font-size: 0.95em; color: black;"></div>
 
@@ -65,40 +65,40 @@
 
         <script>
 
-        // Näytetään kello heti sivun latauksessa
-        function naytaKello() {
-            let nyt = new Date();
-            let tunnit = nyt.getHours().toString().padStart(2, '0');
-            let minuutit = nyt.getMinutes().toString().padStart(2, '0');
-            document.getElementById("kello").innerHTML = "Sää kello " + tunnit + ":" + minuutit;
-        }
+            // Näytetään kello heti sivun latauksessa
+            function naytaKello() {
+                let nyt = new Date();
+                let tunnit = nyt.getHours().toString().padStart(2, '0');
+                let minuutit = nyt.getMinutes().toString().padStart(2, '0');
+                document.getElementById("kello").innerHTML = "Sää kello " + tunnit + ":" + minuutit;
+            }
 
-        // Päivitetään kello joka sekunti
-        setInterval(naytaKello, 1000);
-        naytaKello(); // näytetään heti
+            // Päivitetään kello joka sekunti
+            setInterval(naytaKello, 1000);
+            naytaKello(); // näytetään heti
 
-        // Haetaan Helsingin sää OpenWeather API:sta
-        fetch("https://api.openweathermap.org/data/2.5/weather?id=658225&appid=665ecd56dfc08dbb50feb8b8f5034e28&lang=fi&units=metric")
-            .then(response => response.json())
-            .then(data => {
-                // Haetaan tarvittavat tiedot
-                let weatherDesc = data.weather[0].description;
-                let temp = data.main.temp;
-                let wind = data.wind.speed;
-                let icon = data.weather[0].icon;
+            // Haetaan Helsingin sää OpenWeather API:sta
+            fetch("https://api.openweathermap.org/data/2.5/weather?id=658225&appid=665ecd56dfc08dbb50feb8b8f5034e28&lang=fi&units=metric")
+                .then(response => response.json())
+                .then(data => {
+                    // Haetaan tarvittavat tiedot
+                    let weatherDesc = data.weather[0].description;
+                    let temp = data.main.temp;
+                    let wind = data.wind.speed;
+                    let icon = data.weather[0].icon;
 
-                // Luodaan HTML niin, että vastaus on eri rivillä kuin label
-                let html = "<p><b>Sää:<br>" + weatherDesc + "</b></p>";
-                html += "<p><b>Lämpötila:<br>" + temp + " °C</b></p>";
-                html += "<p><b>Tuuli:<br>" + wind + " m/s</b></p>";
-                html += "<p><b>Kuva:<br><img src='https://openweathermap.org/img/wn/" + icon + "@2x.png' alt='Sääkuva'></b></p>";
+                    // Luodaan HTML niin, että vastaus on eri rivillä kuin label
+                    let html = "<p><h3><b>Sää:</h3>" + weatherDesc + "</b></p>";
+                    html += "<p><h3><b>Lämpötila:</h3>" + temp + " °C</b></p>";
+                    html += "<p><h3><b>Tuuli:</h3>" + wind + " m/s</b></p>";
+                    html += "<img src='https://openweathermap.org/img/wn/" + icon + "@2x.png' alt='Sääkuva' class='img-fluid' style='max-width: 20%; max-height: 190px;'>";
 
-                // Näytetään HTML sivulla
-                document.getElementById("saa").innerHTML = html;
-            })
-            .catch(error => {
-                document.getElementById("saa").innerHTML = "Sään hakeminen epäonnistui";
-            });
+                    // Näytetään HTML sivulla
+                    document.getElementById("saa").innerHTML = html;
+                })
+                .catch(error => {
+                    document.getElementById("saa").innerHTML = "Sään hakeminen epäonnistui";
+                });
         </script>
     </main>
 
