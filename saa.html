@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+    <title>JSON Tehtävät</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+
+    <! –– Bootstrap CSS ja JS linkitys––>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<style>
+    img {
+        width: 100%;
+    }
+</style>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm navbar-custom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Etusivu (Tehtävä 1 OSA I)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kolmas.html">Tehtävä 1 OSA II</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="poke.html">Poke haku (Tehtävä 2 OSA I)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="eevee.html">Tehtävä 2 OSA II</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="saa.html">Tehtävä 3</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sivun sisältö -->
+    <main  style="font-family: 'Times New Roman', Times, serif;">
+        <div class="card mb-3" style="max-width: 660px; max-height: 600px;">
+            <div class="card-body" color="">
+                <h1 class="card-title"><strong>Sää Helsingissä</strong></h1>
+                
+                <!-- JS kello -->
+                <div id="kello" style="margin-bottom: 10px; font-size: 0.95em; color: black;"></div>
+
+                <!-- Sään tiedot tulevat tänne -->
+                <div id="saa"></div>
+
+            </div>
+        </div>
+
+        <script>
+
+        // Näytetään kello heti sivun latauksessa
+        function naytaKello() {
+            let nyt = new Date();
+            let tunnit = nyt.getHours().toString().padStart(2, '0');
+            let minuutit = nyt.getMinutes().toString().padStart(2, '0');
+            document.getElementById("kello").innerHTML = "Sää kello " + tunnit + ":" + minuutit;
+        }
+
+        // Päivitetään kello joka sekunti
+        setInterval(naytaKello, 1000);
+        naytaKello(); // näytetään heti
+
+        // Haetaan Helsingin sää OpenWeather API:sta
+        fetch("https://api.openweathermap.org/data/2.5/weather?id=658225&appid=665ecd56dfc08dbb50feb8b8f5034e28&lang=fi&units=metric")
+            .then(response => response.json())
+            .then(data => {
+                // Haetaan tarvittavat tiedot
+                let weatherDesc = data.weather[0].description;
+                let temp = data.main.temp;
+                let wind = data.wind.speed;
+                let icon = data.weather[0].icon;
+
+                // Luodaan HTML niin, että vastaus on eri rivillä kuin label
+                let html = "<p><b>Sää:<br>" + weatherDesc + "</b></p>";
+                html += "<p><b>Lämpötila:<br>" + temp + " °C</b></p>";
+                html += "<p><b>Tuuli:<br>" + wind + " m/s</b></p>";
+                html += "<p><b>Kuva:<br><img src='https://openweathermap.org/img/wn/" + icon + "@2x.png' alt='Sääkuva'></b></p>";
+
+                // Näytetään HTML sivulla
+                document.getElementById("saa").innerHTML = html;
+            })
+            .catch(error => {
+                document.getElementById("saa").innerHTML = "Sään hakeminen epäonnistui";
+            });
+        </script>
+    </main>
+
+</body>
+
+</html>
